@@ -1,0 +1,28 @@
+﻿@model BundleHelper_Test.Models.Book
+
+<div class="book">
+    <div><div class="description">Title:</div><div class="value">@Model.Title</div></div>
+    <div><div class="description">Author:</div><div class="value">@Model.Author</div></div>
+    <div><div class="description">Published On:</div><div class="value">@Model.PublishDate</div></div>
+
+    <div class="action">
+        <button type="button" item="@Model.ID">Buy this book!</button>
+    </div>
+</div>
+
+<!-- Add specific stylesheet (book.css) to head tag -->
+@Html.AddStyle("~/Content/book.css")
+
+<!-- Add some inline scripts to body tag -->
+@Html.AddBodyScript(
+    @<script>
+        $(document).ready(function () {
+            $('button[item]').click(function () {
+                var item = $(this).attr('item');
+                alert('Going to buy book id=' + item);
+
+                return false;
+            });
+        });
+    </script>
+)

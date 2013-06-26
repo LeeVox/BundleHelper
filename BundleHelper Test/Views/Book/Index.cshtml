@@ -1,0 +1,14 @@
+﻿@model IEnumerable<BundleHelper_Test.Models.Book>
+
+<!-- Add specific stylesheet (store.css) to head tag -->
+@Html.AddStyle("~/Content/store.css")
+
+<h2>Book Store</h2>
+<div class="store">
+    @foreach (var book in Model)
+    {
+        <a title='View Detail for book "@book.Title"' href='@Url.Action("Detail",new { id = book.ID })'>
+        @Html.Partial("_BookView", book)
+        </a>
+    }
+</div>

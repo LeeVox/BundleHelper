@@ -1,0 +1,9 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<fieldset class="customerlayout">
+    <legend>This is _CustomerLayout.cshtml</legend>
+    @Html.Partial("_CurrentUser")
+
+    @RenderBody()
+</fieldset>

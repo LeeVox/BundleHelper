@@ -1,0 +1,10 @@
+﻿.customerlayout
+{
+    border-radius: 10px;
+    background-color: #F2F2F2;
+}
+
+.customerlayout h2
+{
+    color:Red;
+}

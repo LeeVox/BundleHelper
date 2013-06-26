@@ -1,0 +1,9 @@
+﻿div.currentUser
+{
+    float:right;
+    text-align:center;
+    background:#D8D8D8;
+    width:200px;
+    padding:10px;
+    border-radius: 6px;
+}

@@ -1,0 +1,25 @@
+﻿@model BundleHelper_Test.Models.Book
+
+<!-- Add specific stylesheet (book.css) to head tag -->
+@Html.AddStyle("~/Content/book.css")
+
+<h3>Book Detail</h3>
+<p>
+    @Html.ActionLink("<< Back to list", "Index")
+</p>
+@Html.Partial("_BookView", Model)
+
+<div>
+    <button type="button" id="btnCheckStock">Check stock!</button>
+</div>
+
+<!-- Add specific scripts file (bookdetail.js) to body tag -->
+@Html.AddBodyScript("~/Scripts/book/bookdetail.js")
+
+<!-- Add script which contains some parameters to head tag -->
+@Html.AddHeadScript(
+    @<script>
+        var CHECK_STOCK_URL = '@Url.Action("CheckStock", "Book")';
+        var itemID = @Model.ID;
+    </script>
+)

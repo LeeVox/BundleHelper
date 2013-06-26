@@ -1,0 +1,38 @@
+﻿<!-- Add some core javascript frameworks to head tag -->
+<!-- use insertMode to make sure this framework is on top of all or scripts -->
+@Html.AddHeadScript("~/bundles/modernizr", true)
+
+<!-- Add master stylesheet to head tag -->
+@Html.AddStyle("~/Content/css")
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    
+
+    <!-- Add some core javascript frameworks to head tag -->
+    <!-- use insertMode to make sure this framework is on top of all or scripts -->
+    @Html.AddHeadScript("~/bundles/jquery", true)
+    
+    <!-- Render all stylesheets to head tag -->
+    @Html.RenderStyles()
+    <!-- End eender all stylesheets to head tag -->
+
+    <!-- Render all scripts to head tag -->
+    @Html.RenderHeadScripts()
+    <!-- End render all scripts to head tag -->
+</head>
+<body>
+    @RenderBody()
+
+    <!-- Render all scripts to the end of body tag -->
+    @Html.RenderBodyScripts()
+    <!-- End render all scripts to the end of body tag -->
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
