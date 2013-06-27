@@ -30,10 +30,13 @@ namespace System.Web.Mvc
     public abstract class UsingBundle : ActionFilterAttribute
     {
         protected string[] Files { get; set; }
-        protected virtual Action<ActionExecutingContext, string> Function { get; set; }
+        protected bool AddToTop { get; set; }
+        protected virtual Action<ActionExecutingContext, string, bool> Function { get; set; }
 
-        public UsingBundle(params string[] files)
+        public UsingBundle(Action<ActionExecutingContext, string, bool> function, bool addToTop, params string[] files)
         {
+            this.Function = function;
+            this.AddToTop = addToTop;
             this.Files = files;
         }
 
@@ -42,7 +45,7 @@ namespace System.Web.Mvc
             base.OnActionExecuting(filterContext);
             foreach (var file in Files)
             {
-                Function.Invoke(filterContext, file);
+                Function.Invoke(filterContext, file, AddToTop);
             }
         }
     }
@@ -56,9 +59,19 @@ namespace System.Web.Mvc
         /// Path to styles files
         /// </summary>
         public UsingStyles(params string[] files)
-            : base(files)
+            : base(BundleHelper.AddStyle, false, files)
         {
-            Function = (context, file) => BundleHelper.AddStyle(context, file);
+        }
+
+        /// <summary>
+        /// Path to styles files
+        /// </summary>
+        /// <param name="addToTop">
+        /// Add to top of stylesheet zone in head tag
+        /// </param>
+        public UsingStyles(bool addToTop, params string[] files)
+            : base(BundleHelper.AddStyle, addToTop, files)
+        {
         }
     }
 
@@ -71,9 +84,19 @@ namespace System.Web.Mvc
         /// Path to script files
         /// </summary>
         public UsingHeadScripts(params string[] files)
-            : base(files)
+            : base(BundleHelper.AddHeadScript, false, files)
         {
-            Function = (context, file) => BundleHelper.AddHeadScript(context, file);
+        }
+
+        /// <summary>
+        /// Path to script files
+        /// </summary>
+        /// <param name="addToTop">
+        /// Add to top of script zone in head tag
+        /// </param>
+        public UsingHeadScripts(bool addToTop, params string[] files)
+            : base(BundleHelper.AddHeadScript, addToTop, files)
+        {
         }
     }
 
@@ -86,9 +109,19 @@ namespace System.Web.Mvc
         /// Path to script files
         /// </summary>
         public UsingBodyScripts(params string[] files)
-            : base(files)
+            : base(BundleHelper.AddBodyScript, false, files)
         {
-            Function = (context, file) => BundleHelper.AddBodyScript(context, file);
+        }
+
+        /// <summary>
+        /// Path to script files
+        /// </summary>
+        /// <param name="addToTop">
+        /// Add to top of script zone in body tag
+        /// </param>
+        public UsingBodyScripts(bool addToTop, params string[] files)
+            : base(BundleHelper.AddBodyScript, addToTop, files)
+        {
         }
     }
 
@@ -102,7 +135,22 @@ namespace System.Web.Mvc
         /// path to css file
         /// </param>
         /// <remarks>Used by UsingStyles Attribute</remarks>
-        public static object AddStyle(ActionExecutingContext context, string filePath, bool insertMode = false)
+        public static void AddStyle(ActionExecutingContext context, string filePath)
+        {
+            AddStyle(context, filePath, false);
+        }
+
+        /// <summary>
+        /// Add styles file to head tag
+        /// </summary>
+        /// <param name="filePath">
+        /// path to css file
+        /// </param>
+        /// <param name="addToTop">
+        /// Add to top of stylesheet zone in head tag
+        /// </param>
+        /// <remarks>Used by UsingStyles Attribute</remarks>
+        public static void AddStyle(ActionExecutingContext context, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -114,9 +162,7 @@ namespace System.Web.Mvc
             item.Source = GetSource(context);
 #endif
 
-            AddItem(GetContainer(context.HttpContext), item, insertMode);
-
-            return null; // just for razor syntax
+            AddItem(GetContainer(context.HttpContext), item, addToTop);
 
         }
 
@@ -127,7 +173,22 @@ namespace System.Web.Mvc
         /// path to script file
         /// </param>
         /// <remarks>Used by UsingHeadScripts Attribute</remarks>
-        public static object AddHeadScript(ActionExecutingContext context, string filePath, bool insertMode = false)
+        public static void AddHeadScript(ActionExecutingContext context, string filePath)
+        {
+            AddHeadScript(context, filePath);
+        }
+
+        /// <summary>
+        /// Add script file to head tag
+        /// </summary>
+        /// <param name="filePath">
+        /// path to script file
+        /// </param>
+        /// /// <param name="addToTop">
+        /// Add to top of script zone in head tag
+        /// </param>
+        /// <remarks>Used by UsingHeadScripts Attribute</remarks>
+        public static void AddHeadScript(ActionExecutingContext context, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -139,9 +200,7 @@ namespace System.Web.Mvc
             item.Source = GetSource(context);
 #endif
 
-            AddItem(GetContainer(context.HttpContext), item, insertMode);
-
-            return null; // just for razor syntax
+            AddItem(GetContainer(context.HttpContext), item, addToTop);
         }
 
         /// <summary>
@@ -151,7 +210,22 @@ namespace System.Web.Mvc
         /// path to script file
         /// </param>
         /// <remarks>Used by UsingBodyScripts Attribute</remarks>
-        public static object AddBodyScript(ActionExecutingContext context, string filePath, bool insertMode = false)
+        public static void AddBodyScript(ActionExecutingContext context, string filePath)
+        {
+            AddBodyScript(context, filePath);
+        }
+
+        /// <summary>
+        /// Add script file to body tag
+        /// </summary>
+        /// <param name="filePath">
+        /// path to script file
+        /// </param>
+        /// <param name="addToTop">
+        /// Add to top of script zone in body tag
+        /// </param>
+        /// <remarks>Used by UsingBodyScripts Attribute</remarks>
+        public static void AddBodyScript(ActionExecutingContext context, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -163,9 +237,7 @@ namespace System.Web.Mvc
             item.Source = GetSource(context);
 #endif
 
-            AddItem(GetContainer(context.HttpContext), item, insertMode);
-
-            return null; // just for razor syntax
+            AddItem(GetContainer(context.HttpContext), item, addToTop);
         }
 
         private static string GetSource(ActionExecutingContext context)

@@ -90,7 +90,27 @@ namespace System.Web.Mvc
         /// AddStyles("~/Content/css");
         /// </code>
         /// </example>
-        public static object AddStyle(this HtmlHelper htmlHelper, string filePath, bool insertMode = false)
+        public static object AddStyle(this HtmlHelper htmlHelper, string filePath)
+        {
+            return AddStyle(htmlHelper, filePath, false);
+        }
+
+        /// <summary>
+        /// Add styles file to head tag
+        /// </summary>
+        /// <param name="filePath">
+        /// path to css file
+        /// </param>
+        /// <param name="addToTop">
+        /// Add to top of stylesheet zone in head tag
+        /// </param>
+        /// <example>
+        /// <code>
+        /// AddStyles("~/Content/Site.css", true);
+        /// AddStyles("~/Content/css", false);
+        /// </code>
+        /// </example>
+        public static object AddStyle(this HtmlHelper htmlHelper, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -98,7 +118,7 @@ namespace System.Web.Mvc
                 Source = WebPageContext.Current.Page.VirtualPath,
                 Value = Styles.Render(filePath).ToHtmlString()
             };
-            AddItem(GetContainer(htmlHelper), item, insertMode);
+            AddItem(GetContainer(htmlHelper), item, addToTop);
 
             return null; // just for razor syntax
         }
@@ -127,7 +147,27 @@ namespace System.Web.Mvc
         /// AddHeadScripts("~/bundles/jquery");
         /// </code>
         /// </example>
-        public static object AddHeadScript(this HtmlHelper htmlHelper, string filePath, bool insertMode = false)
+        public static object AddHeadScript(this HtmlHelper htmlHelper, string filePath)
+        {
+            return AddHeadScript(htmlHelper, filePath, false);
+        }
+
+        /// <summary>
+        /// Add script file to head tag
+        /// </summary>
+        /// <param name="filePath">
+        /// path to javascript file
+        /// </param>
+        /// <param name="addToTop">
+        /// Add to top of script zone in head tag
+        /// </param>
+        /// <example>
+        /// <code>
+        /// AddHeadScripts("~/Scripts/HelloWorld.js", false);
+        /// AddHeadScripts("~/bundles/jquery", true);
+        /// </code>
+        /// </example>
+        public static object AddHeadScript(this HtmlHelper htmlHelper, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -136,7 +176,7 @@ namespace System.Web.Mvc
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
-            AddItem(GetContainer(htmlHelper), item, insertMode);
+            AddItem(GetContainer(htmlHelper), item, addToTop);
 
             return null; // just for razor syntax
         }
@@ -152,7 +192,7 @@ namespace System.Web.Mvc
         /// AddHeadScripts(<b>@</b><script>alert('hello world');</script>);
         /// </code>
         /// </example>
-        public static object AddHeadScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript, bool insertMode = false)
+        public static object AddHeadScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript)
         {
             var item = new BundleModel()
             {
@@ -161,7 +201,7 @@ namespace System.Web.Mvc
                 Value = rgxInlineScript.Replace(inlineScript.Invoke(null).ToHtmlString(), " ")
             };
 
-            AddItem(GetContainer(htmlHelper), item, insertMode);
+            AddItem(GetContainer(htmlHelper), item, false);
 
             return null; // just for razor syntax
         }
@@ -191,7 +231,27 @@ namespace System.Web.Mvc
         /// AddBodyScripts("~/bundles/jquery");
         /// </code>
         /// </example>
-        public static object AddBodyScript(this HtmlHelper htmlHelper, string filePath, bool insertMode = false)
+        public static object AddBodyScript(this HtmlHelper htmlHelper, string filePath)
+        {
+            return AddBodyScript(htmlHelper, filePath, false);
+        }
+
+        /// <summary>
+        /// Add script file to end of body tag
+        /// </summary>
+        /// <param name="filePath">
+        /// path to javascript file
+        /// </param>
+        /// <param name="addToTop">
+        /// Add to top of script zone in body tag
+        /// </param>
+        /// <example>
+        /// <code>
+        /// AddBodyScripts("~/Scripts/HelloWorld.js", false);
+        /// AddBodyScripts("~/bundles/jquery", true);
+        /// </code>
+        /// </example>
+        public static object AddBodyScript(this HtmlHelper htmlHelper, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -200,7 +260,7 @@ namespace System.Web.Mvc
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
-            AddItem(GetContainer(htmlHelper), item, insertMode);
+            AddItem(GetContainer(htmlHelper), item, addToTop);
 
             return null; // just for razor syntax
         }
@@ -216,7 +276,7 @@ namespace System.Web.Mvc
         /// AddBodyScripts(<b>@</b><script>alert('hello world');</script>);
         /// </code>
         /// </example>
-        public static object AddBodyScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript, bool insertMode = false)
+        public static object AddBodyScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript)
         {
             var item = new BundleModel()
             {
@@ -225,7 +285,7 @@ namespace System.Web.Mvc
                 Value = rgxInlineScript.Replace(inlineScript.Invoke(null).ToHtmlString(), " ")
             };
 
-            AddItem(GetContainer(htmlHelper), item, insertMode);
+            AddItem(GetContainer(htmlHelper), item, false);
 
             return null; // just for razor syntax
         }
@@ -255,17 +315,21 @@ namespace System.Web.Mvc
             return context.Items[KEY] as IList<BundleModel>;
         }
 
-        private static void AddItem(IList<BundleModel> list, BundleModel item, bool insertMode = false, bool ignoreCase = true)
+        private static void AddItem(IList<BundleModel> list, BundleModel item, bool addToTop = false, bool ignoreCase = true)
         {
             var existingItem = list.FirstOrDefault(x => x.Value.IndexOf(item.Value, ignoreCase ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture) >= 0);
             if (existingItem == null)
             {
-                if (insertMode) list.Insert(0, item); else list.Add(item);
+                if (addToTop)
+                    list.Insert(0, item);
+                else
+                    list.Add(item);
             }
             else
             {
                 existingItem.Source += ";\r\n" + item.Source;
-                if ((int)item.Type < (int)existingItem.Type) existingItem.Type = item.Type;
+                if ((int)item.Type < (int)existingItem.Type)
+                    existingItem.Type = item.Type;
             }
         }
 

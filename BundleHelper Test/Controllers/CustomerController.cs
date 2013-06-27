@@ -34,7 +34,7 @@ namespace BundleHelper_Test.Controllers
         }
 
         [UsingBodyScripts("~/SCRIPTS/CuSTomer/uSEr.js", "~/Scripts/customer/action3.js")]
-        [UsingStyles("~/Content/action3.css")]
+        [UsingStyles(true, "~/Content/action3.css")]
         public ActionResult Action3()
         {
             /*
