@@ -1,18 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web.Optimization;
 using System.Web.WebPages;
 
 namespace System.Web.Mvc
 {
     /*
-     *      Version     Date            Description
-     *      1.0         Jun-25-2013     First draft
-     *      1.1         Jun-26-2013     Updated for supporting Using Attributes
-     *      1.1.5       Jun-26-2013     Fixed to ignore case for checking duplicated items
-     */
-
-    /*
+     *  Author: Dat Le (http://www.lethanhdat.com)
+     * 
      *  How to use:
      *      + Call those methods in master layout (~/View/Shared/_Layout.cshtml):
      *          <head>
@@ -42,15 +38,41 @@ namespace System.Web.Mvc
     /// </summary>
     public static partial class BundleHelper
     {
+        #region inner classes
+        
+        class BundleModel
+        {
+            public string Source { get; set; }
+            public string Value { get; set; }
+            public BundleType Type { get; set; }
+
+            public override string ToString()
+            {
+#if DEBUG
+                return string.Format("<!-- Added from: {0} -->\r\n{1}", Source, Value);
+#else
+                return Value;
+#endif
+            }
+        }
+
+        enum BundleType // Order by HTML struct, do not change their int value
+        {
+            Style = 0,
+            HeadScript = 1,
+            HeadInlineScript = 2,
+            BodyInlineScript = 4,
+            BodyScript = 8
+        }
+
+        #endregion
+
         #region const
 
-        // just provide any unique random string for keys
-        private static readonly string PROJECT_NAME = HttpContext.Current.ApplicationInstance.GetType().Assembly.FullName;
-        private static readonly string KEY_STYLES = PROJECT_NAME + "___styles";
-        private static readonly string KEY_HEAD_SCRIPTS = PROJECT_NAME + "___head_scripts";
-        private static readonly string KEY_HEAD_INLINE_SCRIPTS = PROJECT_NAME + "___head_inline_scripts";
-        private static readonly string KEY_BODY_INLINE_SCRIPTS = PROJECT_NAME + "___body_inline_scripts";
-        private static readonly string KEY_BODY_SCRIPTS = PROJECT_NAME + "___body_scripts";
+        // just provide any unique random string for key
+        private static readonly string KEY = HttpContext.Current.ApplicationInstance.GetType().Assembly.FullName;
+
+        private static Regex rgxInlineScript = new Regex(@"\s+");
 
         #endregion
 
@@ -70,11 +92,15 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddStyle(this HtmlHelper htmlHelper, string filePath, bool insertMode = false)
         {
-            string style = System.Web.Optimization.Styles.Render(filePath).ToHtmlString();
+            var item = new BundleModel()
+            {
+                Type = BundleType.Style,
+                Source = WebPageContext.Current.Page.VirtualPath,
+                Value = Styles.Render(filePath).ToHtmlString()
+            };
+            AddItem(GetContainer(htmlHelper), item, insertMode);
 
-            AddItemToList(GetHttpContextItem(htmlHelper, KEY_STYLES), style, WebPageContext.Current.Page.VirtualPath, insertMode);
-
-            return null;
+            return null; // just for razor syntax
         }
 
         /// <summary>
@@ -82,7 +108,7 @@ namespace System.Web.Mvc
         /// </summary>
         public static IHtmlString RenderStyles(this HtmlHelper htmlHelper)
         {
-            return new HtmlString(string.Join("\r\n", GetHttpContextItem(htmlHelper, KEY_STYLES)));
+            return new HtmlString(string.Join("\r\n", GetContainer(htmlHelper).Where(x => x.Type == BundleType.Style)));
         }
 
         #endregion
@@ -103,15 +129,14 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddHeadScript(this HtmlHelper htmlHelper, string filePath, bool insertMode = false)
         {
-            string script = System.Web.Optimization.Scripts.Render(filePath).ToHtmlString();
-
-            var bodyScripts = GetHttpContextItem(htmlHelper, KEY_BODY_SCRIPTS);
-            BundleModel tmp = null;
-            if ((tmp = Find(bodyScripts, script, true)) != null)
+            var item = new BundleModel()
             {
-                bodyScripts.Remove(tmp);
-            }
-            AddItemToList(GetHttpContextItem(htmlHelper, KEY_HEAD_SCRIPTS), script, WebPageContext.Current.Page.VirtualPath, insertMode);
+                Type = BundleType.HeadScript,
+                Source = WebPageContext.Current.Page.VirtualPath,
+                Value = Scripts.Render(filePath).ToHtmlString()
+            };
+
+            AddItem(GetContainer(htmlHelper), item, insertMode);
 
             return null; // just for razor syntax
         }
@@ -129,15 +154,14 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddHeadScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript, bool insertMode = false)
         {
-            string script = Regex.Replace(inlineScript.Invoke(null).ToHtmlString(), @"\s+", " ");
-
-            var bodyScripts = GetHttpContextItem(htmlHelper, KEY_BODY_INLINE_SCRIPTS);
-            BundleModel tmp = null;
-            if ((tmp = Find(bodyScripts, script)) != null)
+            var item = new BundleModel()
             {
-                bodyScripts.Remove(tmp);
-            }
-            AddItemToList(GetHttpContextItem(htmlHelper, KEY_HEAD_INLINE_SCRIPTS), script, WebPageContext.Current.Page.VirtualPath, insertMode);
+                Type = BundleType.HeadInlineScript,
+                Source = WebPageContext.Current.Page.VirtualPath,
+                Value = rgxInlineScript.Replace(inlineScript.Invoke(null).ToHtmlString(), " ")
+            };
+
+            AddItem(GetContainer(htmlHelper), item, insertMode);
 
             return null; // just for razor syntax
         }
@@ -147,11 +171,8 @@ namespace System.Web.Mvc
         /// </summary>
         public static IHtmlString RenderHeadScripts(this HtmlHelper htmlHelper)
         {
-            // script files
-            string scriptFiles = string.Join("\r\n", GetHttpContextItem(htmlHelper, KEY_HEAD_SCRIPTS));
-            string inlineScripts = string.Join("\r\n", GetHttpContextItem(htmlHelper, KEY_HEAD_INLINE_SCRIPTS));
-
-            return new HtmlString(scriptFiles + inlineScripts);
+            var allHeadScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.HeadScript || x.Type == BundleType.HeadInlineScript).OrderBy(x => x.Type);
+            return new HtmlString(string.Join("\r\n", allHeadScripts));
         }
 
         #endregion
@@ -172,13 +193,14 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddBodyScript(this HtmlHelper htmlHelper, string filePath, bool insertMode = false)
         {
-            string script = System.Web.Optimization.Scripts.Render(filePath).ToHtmlString();
-
-            var headScripts = GetHttpContextItem(htmlHelper, KEY_HEAD_SCRIPTS);
-            if (Find(headScripts, script, true) == null)
+            var item = new BundleModel()
             {
-                AddItemToList(GetHttpContextItem(htmlHelper, KEY_BODY_SCRIPTS), script, WebPageContext.Current.Page.VirtualPath, insertMode);
-            }
+                Type = BundleType.BodyScript,
+                Source = WebPageContext.Current.Page.VirtualPath,
+                Value = Scripts.Render(filePath).ToHtmlString()
+            };
+
+            AddItem(GetContainer(htmlHelper), item, insertMode);
 
             return null; // just for razor syntax
         }
@@ -196,13 +218,15 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddBodyScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript, bool insertMode = false)
         {
-            string script = Regex.Replace(inlineScript.Invoke(null).ToHtmlString(), @"\s+", " ");
-
-            var headScripts = GetHttpContextItem(htmlHelper, KEY_HEAD_INLINE_SCRIPTS);
-            if (Find(headScripts, script) == null)
+            var item = new BundleModel()
             {
-                AddItemToList(GetHttpContextItem(htmlHelper, KEY_BODY_INLINE_SCRIPTS), script, WebPageContext.Current.Page.VirtualPath, insertMode);
-            }
+                Type = BundleType.BodyInlineScript,
+                Source = WebPageContext.Current.Page.VirtualPath,
+                Value = rgxInlineScript.Replace(inlineScript.Invoke(null).ToHtmlString(), " ")
+            };
+
+            AddItem(GetContainer(htmlHelper), item, insertMode);
+
             return null; // just for razor syntax
         }
 
@@ -211,105 +235,37 @@ namespace System.Web.Mvc
         /// </summary>
         public static IHtmlString RenderBodyScripts(this HtmlHelper htmlHelper)
         {
-            // script files
-            string scriptFiles = string.Join("\r\n", GetHttpContextItem(htmlHelper, KEY_BODY_SCRIPTS));
-            string inlineScripts = string.Join("\r\n", GetHttpContextItem(htmlHelper, KEY_BODY_INLINE_SCRIPTS));
-
-            return new HtmlString(inlineScripts + scriptFiles);
+            var allBodyScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.BodyInlineScript || x.Type == BundleType.BodyScript).OrderBy(x => x.Type);
+            return new HtmlString(string.Join("\r\n", allBodyScripts));
         }
 
         #endregion
 
         #region ulti
 
-        /// <summary>
-        /// Get item in HttpContext for storing paths in each requests.
-        /// </summary>
-        private static IList<BundleModel> GetHttpContextItem(HtmlHelper htmlHelper, string key)
+        private static IList<BundleModel> GetContainer(HtmlHelper htmlHelper)
         {
-            return GetHttpContextItem(htmlHelper.ViewContext.HttpContext, key);
+            return GetContainer(htmlHelper.ViewContext.HttpContext);
         }
 
-        /// <summary>
-        /// Get item in HttpContext for storing paths in each requests.
-        /// </summary>
-        private static IList<BundleModel> GetHttpContextItem(HttpContextBase context, string key)
+        private static IList<BundleModel> GetContainer(HttpContextBase context)
         {
-            if (context.Items[key] == null)
-                context.Items[key] = new List<BundleModel>();
-            return context.Items[key] as IList<BundleModel>;
+            if (context.Items[KEY] == null)
+                context.Items[KEY] = new List<BundleModel>();
+            return context.Items[KEY] as IList<BundleModel>;
         }
 
-        private static void AddItemToList(IList<BundleModel> list, string item, string source, bool insertMode)
+        private static void AddItem(IList<BundleModel> list, BundleModel item, bool insertMode = false, bool ignoreCase = true)
         {
-            var existingItem = list.FirstOrDefault(x => x.Content.Contains(item));
-
-#if DEBUG
-            if (existingItem != null && source != null)
-            {
-                existingItem.From += ";\r\n" + source;
-            }
-            else
-            {
-                var newModel = new BundleModel()
-                {
-                    From = source,
-                    Content = item
-                };
-
-                if (insertMode)
-                {
-                    list.Insert(0, newModel);
-                }
-                else
-                {
-                    list.Add(newModel);
-                }
-            }
-#else
+            var existingItem = list.FirstOrDefault(x => x.Value.IndexOf(item.Value, ignoreCase ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture) >= 0);
             if (existingItem == null)
             {
-                var newModel = new BundleModel()
-                {
-                    Content = item
-                };
-
-                if (insertMode)
-                {
-                    list.Insert(0, newModel);
-                }
-                else
-                {
-                    list.Add(newModel);
-                }
-            }
-#endif
-        }
-
-        private static BundleModel Find(IList<BundleModel> list, string item, bool ignoreCase = false)
-        {
-            if (ignoreCase)
-            {
-                return list.FirstOrDefault(x => x.Content.ToLower().Contains(item.ToLower()));
+                if (insertMode) list.Insert(0, item); else list.Add(item);
             }
             else
             {
-                return list.FirstOrDefault(x => x.Content.Contains(item));
-            }
-        }
-
-        class BundleModel
-        {
-            public string From { get; set; }
-            public string Content { get; set; }
-
-            public override string ToString()
-            {
-#if DEBUG
-                return string.Format("<!-- Added from: {0} -->\r\n{1}", From, Content);
-#else
-                return Content;
-#endif
+                existingItem.Source += ";\r\n" + item.Source;
+                if ((int)item.Type < (int)existingItem.Type) existingItem.Type = item.Type;
             }
         }
 
