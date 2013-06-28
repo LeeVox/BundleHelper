@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Optimization;
+
 namespace System.Web.Mvc
 {
     /*
@@ -135,7 +136,7 @@ namespace System.Web.Mvc
         /// path to css file
         /// </param>
         /// <remarks>Used by UsingStyles Attribute</remarks>
-        public static void AddStyle(ActionExecutingContext context, string filePath)
+        internal static void AddStyle(ActionExecutingContext context, string filePath)
         {
             AddStyle(context, filePath, false);
         }
@@ -150,7 +151,7 @@ namespace System.Web.Mvc
         /// Add to top of stylesheet zone in head tag
         /// </param>
         /// <remarks>Used by UsingStyles Attribute</remarks>
-        public static void AddStyle(ActionExecutingContext context, string filePath, bool addToTop)
+        internal static void AddStyle(ActionExecutingContext context, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -173,7 +174,7 @@ namespace System.Web.Mvc
         /// path to script file
         /// </param>
         /// <remarks>Used by UsingHeadScripts Attribute</remarks>
-        public static void AddHeadScript(ActionExecutingContext context, string filePath)
+        internal static void AddHeadScript(ActionExecutingContext context, string filePath)
         {
             AddHeadScript(context, filePath);
         }
@@ -188,7 +189,7 @@ namespace System.Web.Mvc
         /// Add to top of script zone in head tag
         /// </param>
         /// <remarks>Used by UsingHeadScripts Attribute</remarks>
-        public static void AddHeadScript(ActionExecutingContext context, string filePath, bool addToTop)
+        internal static void AddHeadScript(ActionExecutingContext context, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {
@@ -210,7 +211,7 @@ namespace System.Web.Mvc
         /// path to script file
         /// </param>
         /// <remarks>Used by UsingBodyScripts Attribute</remarks>
-        public static void AddBodyScript(ActionExecutingContext context, string filePath)
+        internal static void AddBodyScript(ActionExecutingContext context, string filePath)
         {
             AddBodyScript(context, filePath);
         }
@@ -225,7 +226,7 @@ namespace System.Web.Mvc
         /// Add to top of script zone in body tag
         /// </param>
         /// <remarks>Used by UsingBodyScripts Attribute</remarks>
-        public static void AddBodyScript(ActionExecutingContext context, string filePath, bool addToTop)
+        internal static void AddBodyScript(ActionExecutingContext context, string filePath, bool addToTop)
         {
             var item = new BundleModel()
             {

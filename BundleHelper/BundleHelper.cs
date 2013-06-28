@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web.Optimization;
 using System.Web.WebPages;
+using BundleHelper;
 
 namespace System.Web.Mvc
 {
@@ -70,9 +70,7 @@ namespace System.Web.Mvc
         #region const
 
         // just provide any unique random string for key
-        private static readonly string KEY = HttpContext.Current.ApplicationInstance.GetType().Assembly.FullName;
-
-        private static Regex rgxInlineScript = new Regex(@"\s+");
+        private static readonly string KEY = "BundlerHelper__" + DateTime.Now.ToString();
 
         #endregion
 
@@ -198,7 +196,7 @@ namespace System.Web.Mvc
             {
                 Type = BundleType.HeadInlineScript,
                 Source = WebPageContext.Current.Page.VirtualPath,
-                Value = rgxInlineScript.Replace(inlineScript.Invoke(null).ToHtmlString(), " ")
+                Value = InlineScriptsController.CompactScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
             };
 
             AddItem(GetContainer(htmlHelper), item, false);
@@ -282,7 +280,7 @@ namespace System.Web.Mvc
             {
                 Type = BundleType.BodyInlineScript,
                 Source = WebPageContext.Current.Page.VirtualPath,
-                Value = rgxInlineScript.Replace(inlineScript.Invoke(null).ToHtmlString(), " ")
+                Value = InlineScriptsController.CompactScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
             };
 
             AddItem(GetContainer(htmlHelper), item, false);
