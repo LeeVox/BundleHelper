@@ -3,23 +3,63 @@
 <!-- Add specific stylesheet (book.css) to head tag -->
 @Html.AddStyle("~/Content/book.css")
 
-<h3>Book Detail</h3>
+<h2>Book Detail</h2>
 <p>
     @Html.ActionLink("<< Back to list", "Index")
 </p>
 @Html.Partial("_BookView", Model)
 
 <div>
-    <button type="button" id="btnCheckStock">Check stock!</button>
+    <button type="button" id="btnCheckStock" class="big-button">Check stock!</button>
 </div>
 
 <!-- Add specific scripts file (bookdetail.js) to body tag -->
 @Html.AddBodyScript("~/Scripts/book/bookdetail.js")
 
-<!-- Add script which contains some parameters to head tag -->
+<!-- Add some inline scripts to head tag -->
 @Html.AddHeadScript(
-    @<script>
-        var CHECK_STOCK_URL = '@Url.Action("CheckStock", "Book")';
-        var itemID = @Model.ID;
-    </script>
+    @<div> <!-- add multiple scripts -->
+        <script>
+            var CHECK_STOCK_URL = '@Url.Action("CheckStock", "Book")';
+            var itemID = @Model.ID;
+        </script>
+        <!-- this invalid tags will be removed -->
+        <p>
+            all other tags (<ul><li>div</li><li>span</li><li>style</li></ul>) will be removed.
+            <style>
+                div { background-color:Black; }
+            </style>
+        </p>
+        <!-- end invalid tags -->
+        <script>
+            alert('This message came from Detail.cshtml');
+        </script>
+    </div>
+)
+
+<!-- Add some inline css to head tag -->
+@Html.AddStyle(
+    @<div>
+        <style>
+             h2 { color:Red; }
+             button.big-button
+             {
+                 width: 150px;
+                 height: 40px;
+                 font-weight: bold;
+                 color: purple;
+             }
+        </style>
+        <!-- this invalid tags will be removed -->
+        <div>
+            all other tags (<b>div</b>, <i>span</i>, <h2>script</h2>...) will be removed.
+            <script>
+                alert('This message will be removed');
+            </script>
+        </div>
+        <!-- end invalid tags -->
+        <style>
+            body { background-color:; }
+        </style>
+    </div>
 )

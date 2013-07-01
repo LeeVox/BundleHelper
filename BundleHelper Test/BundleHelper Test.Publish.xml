@@ -6,66 +6,62 @@
     <file relUrl="Scripts/jquery-1.7.1-vsdoc.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/CurrentUser.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/images/ui-bg_flat_75_ffffff_40x100.png" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Views/Customer/_CustomerLayout.cshtml" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Content/themes/base/jquery.ui.theme.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-icons_cd0a0a_256x240.png" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="bin/WebGrease.dll" publishTime="06/28/2013 11:42:36" />
     <file relUrl="Content/themes/base/jquery.ui.accordion.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/EntityFramework.xml" publishTime="06/28/2013 11:42:53" />
-    <file relUrl="bin/BundleHelper.dll" publishTime="06/28/2013 18:13:30" />
+    <file relUrl="bin/BundleHelper.dll" publishTime="07/01/2013 11:43:59" />
     <file relUrl="Content/themes/base/jquery.ui.button.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="bin/System.Web.Mvc.dll" publishTime="06/28/2013 11:42:45" />
+    <file relUrl="Views/Customer/Index.cshtml" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Net.Http.WebRequest.dll" publishTime="06/28/2013 11:42:49" />
-    <file relUrl="Web.config" publishTime="06/28/2013 18:13:40" />
+    <file relUrl="Web.config" publishTime="07/01/2013 11:44:09" />
+    <file relUrl="Content/themes/base/jquery.ui.autocomplete.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.WebPages.Deployment.xml" publishTime="06/28/2013 11:42:48" />
-    <file relUrl="Content/store.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_65_ffffff_1x400.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/images/ui-icons_cd0a0a_256x240.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/jquery.ui.datepicker.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery-ui.min.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Scripts/jquery.validate.unobtrusive.min.js" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Scripts/customer/user.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Global.asax" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/customer/action1.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Net.Http.Formatting.dll" publishTime="06/28/2013 11:42:47" />
-    <file relUrl="bin/BundleHelper.pdb" publishTime="06/28/2013 18:13:30" />
     <file relUrl="Content/themes/base/images/ui-icons_2e83ff_256x240.png" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/book.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Views/Book/_BookView.cshtml" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Views/Book/_BookView.cshtml" publishTime="07/01/2013 10:49:04" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_75_e6e6e6_1x400.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery.ui.selectable.min.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery.ui.autocomplete.min.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/jquery.ui.slider.css" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Content/themes/base/minified/images/ui-bg_flat_75_ffffff_40x100.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.WebPages.dll" publishTime="06/28/2013 11:42:48" />
     <file relUrl="Scripts/jquery.unobtrusive-ajax.min.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.Mvc.xml" publishTime="06/28/2013 11:42:45" />
+    <file relUrl="Content/themes/base/images/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_55_fbf9ee_1x400.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/jquery.validate-vsdoc.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/customer/action3.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/jquery-1.7.1.min.js" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/images/ui-icons_888888_256x240.png" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Views/Book/Index.cshtml" publishTime="07/01/2013 11:09:18" />
     <file relUrl="Content/themes/base/jquery.ui.core.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-icons_222222_256x240.png" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/minified/jquery.ui.progressbar.min.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_glass_95_fef1ec_1x400.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_75_dadada_1x400.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.Razor.dll" publishTime="06/28/2013 11:42:45" />
     <file relUrl="Content/themes/base/jquery.ui.base.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/Newtonsoft.Json.xml" publishTime="06/28/2013 11:42:58" />
     <file relUrl="bin/Microsoft.Web.Infrastructure.dll" publishTime="06/28/2013 11:42:32" />
+    <file relUrl="bin/System.Web.Mvc.dll" publishTime="06/28/2013 11:42:45" />
     <file relUrl="Content/customer.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Views/Book/Detail.cshtml" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery.ui.tabs.min.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/minified/images/ui-bg_flat_75_ffffff_40x100.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/jquery.ui.selectable.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Scripts/jquery.validate.unobtrusive.js" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="bin/BundleHelper Test.dll" publishTime="06/28/2013 18:13:30" />
+    <file relUrl="Content/book.css" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Views/Customer/_CustomerLayout.cshtml" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/images/ui-icons_222222_256x240.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/jquery.ui.progressbar.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.Razor.xml" publishTime="06/28/2013 11:42:45" />
     <file relUrl="packages.config" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery.ui.core.min.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.WebPages.Razor.dll" publishTime="06/28/2013 11:42:48" />
-    <file relUrl="bin/BundleHelper Test.pdb" publishTime="06/28/2013 18:13:30" />
-    <file relUrl="bin/System.Net.Http.WebRequest.xml" publishTime="06/28/2013 11:42:49" />
-    <file relUrl="Content/themes/base/jquery.ui.autocomplete.css" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Views/Book/Detail.cshtml" publishTime="07/01/2013 11:25:14" />
     <file relUrl="Views/Customer/_CurrentUser.cshtml" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery.ui.button.min.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Views/Customer/Action3.cshtml" publishTime="06/27/2013 10:15:36" />
@@ -81,34 +77,32 @@
     <file relUrl="Content/themes/base/minified/images/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.Http.WebHost.dll" publishTime="06/28/2013 11:42:47" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_glass_55_fbf9ee_1x400.png" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/jquery.ui.dialog.css" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="bin/System.Net.Http.WebRequest.xml" publishTime="06/28/2013 11:42:49" />
     <file relUrl="Scripts/knockout-2.1.0.debug.js" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Scripts/knockout-2.1.0.js" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Content/store.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery.ui.resizable.min.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/Newtonsoft.Json.dll" publishTime="06/28/2013 11:42:58" />
-    <file relUrl="Views/Book/Index.cshtml" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-icons_2e83ff_256x240.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Views/Customer/Action2.cshtml" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/modernizr-2.5.3.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Views/Shared/_Layout.cshtml" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Views/Customer/Index.cshtml" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.Providers.dll" publishTime="06/28/2013 11:42:46" />
     <file relUrl="bin/System.Web.Optimization.dll" publishTime="06/28/2013 11:42:32" />
     <file relUrl="Views/Web.config" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_glass_75_dadada_1x400.png" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Content/themes/base/jquery.ui.dialog.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/Site.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/jquery.ui.dialog.min.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.Http.WebHost.xml" publishTime="06/28/2013 11:42:47" />
-    <file relUrl="Scripts/customer/user.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-icons_888888_256x240.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/book/bookdetail.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.Http.dll" publishTime="06/28/2013 11:42:47" />
     <file relUrl="Content/themes/base/jquery-ui.css" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="bin/WebGrease.dll" publishTime="06/28/2013 11:42:36" />
+    <file relUrl="Scripts/knockout-2.1.0.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Net.Http.xml" publishTime="06/28/2013 11:42:49" />
     <file relUrl="Views/_ViewStart.cshtml" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/images/ui-bg_highlight-soft_75_cccccc_1x100.png" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/jquery.ui.theme.css" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Content/themes/base/jquery.ui.tabs.css" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Content/themes/base/minified/jquery.ui.progressbar.min.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/_references.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/jquery.ui.all.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/jquery-ui-1.8.20.min.js" publishTime="06/27/2013 10:15:36" />
@@ -121,14 +115,18 @@
     <file relUrl="bin/Antlr3.Runtime.dll" publishTime="06/28/2013 11:42:36" />
     <file relUrl="Content/themes/base/images/ui-bg_glass_95_fef1ec_1x400.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Net.Http.dll" publishTime="06/28/2013 11:42:49" />
+    <file relUrl="Content/themes/base/jquery.ui.slider.css" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/jquery-1.7.1.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Scripts/jquery.validate.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Net.Http.Formatting.xml" publishTime="06/28/2013 11:42:47" />
+    <file relUrl="bin/BundleHelper Test.dll" publishTime="07/01/2013 11:43:59" />
     <file relUrl="Content/themes/base/images/ui-bg_flat_0_aaaaaa_40x100.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_flat_0_aaaaaa_40x100.png" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Scripts/jquery.validate.unobtrusive.min.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Content/themes/base/minified/images/ui-bg_glass_65_ffffff_1x400.png" publishTime="06/27/2013 10:15:36" />
     <file relUrl="Views/Shared/Error.cshtml" publishTime="06/27/2013 10:15:36" />
-    <file relUrl="Content/themes/base/jquery.ui.tabs.css" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Content/themes/base/images/ui-icons_888888_256x240.png" publishTime="06/27/2013 10:15:36" />
+    <file relUrl="Scripts/jquery.validate.unobtrusive.js" publishTime="06/27/2013 10:15:36" />
     <file relUrl="bin/System.Web.WebPages.Deployment.dll" publishTime="06/28/2013 11:42:48" />
   </publishProfile>
 </publishData>

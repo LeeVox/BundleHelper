@@ -159,9 +159,8 @@ namespace System.Web.Mvc
                 Value = Styles.Render(filePath).ToHtmlString()
             };
 
-#if DEBUG
-            item.Source = GetSource(context);
-#endif
+            if (LOG_SOURCE)
+                item.Source = GetSource(context);
 
             AddItem(GetContainer(context.HttpContext), item, addToTop);
 
@@ -197,9 +196,8 @@ namespace System.Web.Mvc
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
-#if DEBUG
-            item.Source = GetSource(context);
-#endif
+            if (LOG_SOURCE)
+                item.Source = GetSource(context);
 
             AddItem(GetContainer(context.HttpContext), item, addToTop);
         }
@@ -234,9 +232,8 @@ namespace System.Web.Mvc
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
-#if DEBUG
-            item.Source = GetSource(context);
-#endif
+            if (LOG_SOURCE)
+                item.Source = GetSource(context);
 
             AddItem(GetContainer(context.HttpContext), item, addToTop);
         }

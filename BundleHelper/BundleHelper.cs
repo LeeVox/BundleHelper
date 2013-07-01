@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Optimization;
 using System.Web.WebPages;
-using BundleHelper;
 
 namespace System.Web.Mvc
 {
@@ -39,7 +38,7 @@ namespace System.Web.Mvc
     public static partial class BundleHelper
     {
         #region inner classes
-        
+
         class BundleModel
         {
             public string Source { get; set; }
@@ -48,21 +47,21 @@ namespace System.Web.Mvc
 
             public override string ToString()
             {
-#if DEBUG
-                return string.Format("<!-- Added from: {0} -->\r\n{1}", Source, Value);
-#else
-                return Value;
-#endif
+                if (LOG_SOURCE)
+                    return string.Format("<!-- Added from: {0} -->\r\n{1}", Source, Value);
+                else
+                    return Value;
             }
         }
 
         enum BundleType // Order by HTML struct, do not change their int value
         {
             Style = 0,
-            HeadScript = 1,
-            HeadInlineScript = 2,
-            BodyInlineScript = 4,
-            BodyScript = 8
+            InlineStyle = 1,
+            HeadScript = 2,
+            HeadInlineScript = 4,
+            BodyInlineScript = 8,
+            BodyScript = 16
         }
 
         #endregion
@@ -71,6 +70,8 @@ namespace System.Web.Mvc
 
         // just provide any unique random string for key
         private static readonly string KEY = "BundlerHelper__" + DateTime.Now.ToString();
+
+        private static readonly bool LOG_SOURCE = HttpContext.Current.IsDebuggingEnabled;
 
         #endregion
 
@@ -113,9 +114,12 @@ namespace System.Web.Mvc
             var item = new BundleModel()
             {
                 Type = BundleType.Style,
-                Source = WebPageContext.Current.Page.VirtualPath,
                 Value = Styles.Render(filePath).ToHtmlString()
             };
+
+            if (LOG_SOURCE)
+                item.Source = WebPageContext.Current.Page.VirtualPath;
+
             AddItem(GetContainer(htmlHelper), item, addToTop);
 
             return null; // just for razor syntax
@@ -126,7 +130,7 @@ namespace System.Web.Mvc
         /// </summary>
         public static IHtmlString RenderStyles(this HtmlHelper htmlHelper)
         {
-            return new HtmlString(string.Join("\r\n", GetContainer(htmlHelper).Where(x => x.Type == BundleType.Style)));
+            return new HtmlString(string.Join("\r\n", GetContainer(htmlHelper).Where(x => x.Type == BundleType.Style || x.Type == BundleType.InlineStyle).OrderBy(x => x.Type)));
         }
 
         #endregion
@@ -170,36 +174,13 @@ namespace System.Web.Mvc
             var item = new BundleModel()
             {
                 Type = BundleType.HeadScript,
-                Source = WebPageContext.Current.Page.VirtualPath,
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
+            if (LOG_SOURCE)
+                item.Source = WebPageContext.Current.Page.VirtualPath;
+
             AddItem(GetContainer(htmlHelper), item, addToTop);
-
-            return null; // just for razor syntax
-        }
-
-        /// <summary>
-        /// Add inline scripts to head tag
-        /// </summary>
-        /// <param name="inlineScript">
-        /// content of scripts, must begin with char @
-        /// </param>
-        /// <example>
-        /// <code>
-        /// AddHeadScripts(<b>@</b><script>alert('hello world');</script>);
-        /// </code>
-        /// </example>
-        public static object AddHeadScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript)
-        {
-            var item = new BundleModel()
-            {
-                Type = BundleType.HeadInlineScript,
-                Source = WebPageContext.Current.Page.VirtualPath,
-                Value = InlineScriptsController.CompactScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
-            };
-
-            AddItem(GetContainer(htmlHelper), item, false);
 
             return null; // just for razor syntax
         }
@@ -254,36 +235,13 @@ namespace System.Web.Mvc
             var item = new BundleModel()
             {
                 Type = BundleType.BodyScript,
-                Source = WebPageContext.Current.Page.VirtualPath,
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
+            if (LOG_SOURCE)
+                item.Source = WebPageContext.Current.Page.VirtualPath;
+
             AddItem(GetContainer(htmlHelper), item, addToTop);
-
-            return null; // just for razor syntax
-        }
-
-        /// <summary>
-        /// Add inline scripts to end of body tag
-        /// </summary>
-        /// <param name="inlineScript">
-        /// content of scripts, must begin with char @
-        /// </param>
-        /// <example>
-        /// <code>
-        /// AddBodyScripts(<b>@</b><script>alert('hello world');</script>);
-        /// </code>
-        /// </example>
-        public static object AddBodyScript(this HtmlHelper htmlHelper, Func<object, HelperResult> inlineScript)
-        {
-            var item = new BundleModel()
-            {
-                Type = BundleType.BodyInlineScript,
-                Source = WebPageContext.Current.Page.VirtualPath,
-                Value = InlineScriptsController.CompactScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
-            };
-
-            AddItem(GetContainer(htmlHelper), item, false);
 
             return null; // just for razor syntax
         }
