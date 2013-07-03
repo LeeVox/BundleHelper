@@ -91,6 +91,7 @@ Change Logs
 ------------
  *      Version     Date            Description
  
+ *      2.0.1       Jul-03-2013     Updated some minor changes related to dependencies...
  *      2.0.0       Jul-01-2013     Added feature compress inline javascripts, inline css...
  *      1.2.1       Jun-28-2013     Updated for some minor enhancements
  *      1.2.0       Jun-27-2013     Refactored code
