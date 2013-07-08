@@ -89,12 +89,13 @@ How to install
 
 Change Logs
 ------------
- *      Version     Date            Description
+ *      Version			Date            Description
  
- *      2.0.1       Jul-03-2013     Updated some minor changes related to dependencies...
- *      2.0.0       Jul-01-2013     Added feature compress inline javascripts, inline css...
- *      1.2.1       Jun-28-2013     Updated for some minor enhancements
- *      1.2.0       Jun-27-2013     Refactored code
- *      1.1.5       Jun-26-2013     Fixed to ignore case for checking duplicated items
- *      1.1.0       Jun-26-2013     Updated for supporting Using Attributes
- *      1.0.0       Jun-25-2013     First draft
+ *      2.0 Build 2		Jul-08-2013     Just updated for new format of version's build numer.
+ *      2.0 Build 1		Jul-03-2013		Updated some minor changes related to dependencies...
+ *      2.0				Jul-01-2013     Added feature compress inline javascripts, inline css...
+ *      1.2 Build 1		Jun-28-2013     Updated for some minor enhancements
+ *      1.2				Jun-27-2013     Refactored code
+ *      1.1 Build 5		Jun-26-2013     Fixed to ignore case for checking duplicated items
+ *      1.1				Jun-26-2013     Updated for supporting Using Attributes
+ *      1.0				Jun-25-2013     First draft
