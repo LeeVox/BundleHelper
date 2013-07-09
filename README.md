@@ -2,10 +2,10 @@ BundleHelper
 ============
 Helper for auto removing duplicate css, js...
 
- 1. [Why BundleHelper?](#why-bundlehelper)
- 2. [How to use](#how-to-use)
- 3. [How to install](#how-to-install)
- 4. [Change Logs](#change-logs)
+ * [Why BundleHelper?](#why-bundlehelper)
+ * [How to use](#how-to-use)
+ * [How to install](#how-to-install)
+ * [Change Logs](#change-logs)
 
 Why BundleHelper?
 ------------
