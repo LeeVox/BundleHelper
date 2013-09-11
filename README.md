@@ -91,6 +91,7 @@ Change Logs
 ------------
  *      Version			Date            Description
  
+ *      2.1				Sep-10-2013     Fixed bugs when inline javascripts/stylesheets have comments
  *      2.0 Build 2		Jul-08-2013     Just updated for new format of version's build numer.
  *      2.0 Build 1		Jul-03-2013		Updated some minor changes related to dependencies...
  *      2.0				Jul-01-2013     Added feature compress inline javascripts, inline css...

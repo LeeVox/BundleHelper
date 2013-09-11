@@ -63,6 +63,8 @@ namespace System.Web.Mvc
 {
     public static partial class BundleHelper
     {
+        private static readonly bool IsDebugMode = HttpContext.Current.IsDebuggingEnabled;
+
         #region const
 
         // just provide any unique random string for key
@@ -73,8 +75,10 @@ namespace System.Web.Mvc
         private static readonly string INLINE_STYLESHEET_COMPACTKEY_CONTENT = "BundlerHelper_InlineStyleSheets_COMPACTKEY_CONTENT__" + DateTime.Now.ToString();
 
         private static readonly Regex rgxRemoveSpaces = new Regex(@"\s+");
-        private static readonly Regex rgxGetScriptContents = new Regex(@"\s*<\s*script.*?>\s*(?<content>.+?)\s*</\s*script\s*>\s*");
-        private static readonly Regex rgxGetStyleSheetContents = new Regex(@"\s*<\s*style.*?>\s*(?<content>.+?)\s*</\s*style\s*>\s*");
+        private static readonly Regex rgxRemoveComments1 = new Regex(@"//.*?$", RegexOptions.Multiline);
+        private static readonly Regex rgxRemoveComments2 = new Regex(@"/\*.*?\*/", RegexOptions.Singleline);
+        private static readonly Regex rgxGetScriptContents = new Regex(@"\s*<\s*script.*?>\s*(?<content>.+?)\s*</\s*script\s*>\s*", RegexOptions.Singleline);
+        private static readonly Regex rgxGetStyleSheetContents = new Regex(@"\s*<\s*style.*?>\s*(?<content>.+?)\s*</\s*style\s*>\s*", RegexOptions.Singleline);
 
         #endregion
 
@@ -96,7 +100,7 @@ namespace System.Web.Mvc
             var item = new BundleModel()
             {
                 Type = BundleType.InlineStyle,
-                Value = CompactStyleSheet(htmlHelper, inlineStyleSheet.Invoke(null).ToHtmlString())
+                Value = StoreStyleSheet(htmlHelper, inlineStyleSheet.Invoke(null).ToHtmlString())
             };
 
             if (LOG_SOURCE)
@@ -123,7 +127,7 @@ namespace System.Web.Mvc
             var item = new BundleModel()
             {
                 Type = BundleType.HeadInlineScript,
-                Value = CompactScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
+                Value = StoreScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
             };
 
             if (LOG_SOURCE)
@@ -150,7 +154,7 @@ namespace System.Web.Mvc
             var item = new BundleModel()
             {
                 Type = BundleType.BodyInlineScript,
-                Value = CompactScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
+                Value = StoreScript(htmlHelper, inlineScript.Invoke(null).ToHtmlString())
             };
 
             if (LOG_SOURCE)
@@ -195,7 +199,19 @@ namespace System.Web.Mvc
 
         #region util
 
-        private static string CompactScript(HtmlHelper helper, string rawScript)
+        private static string Normalize(string rawContent)
+        {
+            // remove comments
+            var normalizedContent = rgxRemoveComments1.Replace(rawContent, string.Empty);
+            normalizedContent = rgxRemoveComments2.Replace(normalizedContent, string.Empty);
+
+            // remove spaces
+            normalizedContent = rgxRemoveSpaces.Replace(normalizedContent, " ");
+
+            return normalizedContent;
+        }
+
+        private static string StoreScript(HtmlHelper helper, string rawScript)
         {
             int id;
             var rawKey_CompactKey = GetDictionary<int, int>(helper.ViewContext.HttpContext, INLINE_SCRIPT_RAWKEY_COMPACTKEY);
@@ -209,9 +225,10 @@ namespace System.Web.Mvc
             {
                 var compactKey_Content = GetDictionary<int, string>(helper.ViewContext.HttpContext, INLINE_SCRIPT_COMPACTKEY_CONTENT);
 
-                var removedSpaces = rgxRemoveSpaces.Replace(rawScript, " ");
+                var normalizedContent = IsDebugMode ? rawScript : Normalize(rawScript);
+
                 string compactScript = string.Empty;
-                foreach (var match in rgxGetScriptContents.Matches(removedSpaces))
+                foreach (var match in rgxGetScriptContents.Matches(normalizedContent))
                 {
                     compactScript += (match as Match).Groups["content"].Value;
                 }
@@ -229,7 +246,7 @@ namespace System.Web.Mvc
             return Scripts.Render(InlineBundleController.SCRIPT_LINK + id).ToHtmlString();
         }
 
-        private static string CompactStyleSheet(HtmlHelper helper, string rawStylesheet)
+        private static string StoreStyleSheet(HtmlHelper helper, string rawStylesheet)
         {
             int id;
             var rawKey_CompactKey = GetDictionary<int, int>(helper.ViewContext.HttpContext, INLINE_STYLESHEET_RAWKEY_COMPACTKEY);
@@ -243,9 +260,10 @@ namespace System.Web.Mvc
             {
                 var compactKey_Content = GetDictionary<int, string>(helper.ViewContext.HttpContext, INLINE_STYLESHEET_COMPACTKEY_CONTENT);
 
-                var removedSpaces = rgxRemoveSpaces.Replace(rawStylesheet, string.Empty);
+                var normalizedContent = IsDebugMode ? rawStylesheet : Normalize(rawStylesheet);
+
                 string compactStylesheet = string.Empty;
-                foreach (var match in rgxGetStyleSheetContents.Matches(removedSpaces))
+                foreach (var match in rgxGetStyleSheetContents.Matches(normalizedContent))
                 {
                     compactStylesheet += (match as Match).Groups["content"].Value;
                 }
