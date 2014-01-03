@@ -40,13 +40,13 @@ How to use
 
 ```csharp
 @Html.AddStyle("~/Content/Site.css")
-@Html.AddStyle("~/Content/css")
+@Html.AddStyle("~/Content/css", int.MaxValue)
 
 @Html.AddHeadScript("~/bundles/jquery")
-@Html.AddHeadScript(@<script>alert('this is script on head tag');</script>)
+@Html.AddHeadScript(@<script>alert('this is script on head tag');</script>, 100)
 
 @Html.AddBodyScript(@<script>alert('this is script at end of body tag');</script>)
-@Html.AddBodyScript("~/Scripts/HelloWorld.js")
+@Html.AddBodyScript("~/Scripts/HelloWorld.js", 9999)
 ```
 
 * You can also add directly javascripts/css into your views (not recommended):
@@ -71,8 +71,8 @@ How to use
 
 ```csharp
 [UsingStyles("~/Content/Site.css", "~/Content/css")]
-[UsingHeadScripts("~/bundles/jquery", "~/Scripts/Global.js")]
-[UsingBodyScripts("~/bundles/jquery", "~/Scripts/HelloWorld.js")]
+[UsingHeadScripts(100, "~/bundles/jquery", "~/Scripts/Global.js")]
+[UsingBodyScripts(int.MaxValue, "~/bundles/jquery", "~/Scripts/HelloWorld.js")]
 public class BookController : Controller
 {
   // code here
@@ -91,6 +91,7 @@ Change Logs
 ------------
  *      Version			Date            Description
  
+ *      2.2				Jan-03-2014     Updated feature to order javascripts/stylesheets by ascending number.
  *      2.1				Sep-10-2013     Fixed bugs when inline javascripts/stylesheets have comments
  *      2.0 Build 2		Jul-08-2013     Just updated for new format of version's build numer.
  *      2.0 Build 1		Jul-03-2013		Updated some minor changes related to dependencies...

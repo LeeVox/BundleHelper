@@ -1,6 +1,6 @@
 ﻿<!-- Add some core javascript frameworks to head tag -->
 <!-- use insertMode to make sure this framework is on top of all or scripts -->
-@Html.AddHeadScript("~/bundles/modernizr", true)
+@Html.AddHeadScript("~/bundles/modernizr", int.MinValue)
 
 <!-- Add master stylesheet to head tag -->
 @Html.AddStyle("~/Content/css")
@@ -16,7 +16,7 @@
 
     <!-- Add some core javascript frameworks to head tag -->
     <!-- use insertMode to make sure this framework is on top of all or scripts -->
-    @Html.AddHeadScript("~/bundles/jquery", true)
+    @Html.AddHeadScript("~/bundles/jquery", 100)
     
     <!-- Render all stylesheets to head tag -->
     @Html.RenderStyles()

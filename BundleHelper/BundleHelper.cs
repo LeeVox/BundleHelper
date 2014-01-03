@@ -41,14 +41,15 @@ namespace System.Web.Mvc
 
         class BundleModel
         {
+            public int Position { get; set; }
             public string Source { get; set; }
             public string Value { get; set; }
             public BundleType Type { get; set; }
 
             public override string ToString()
             {
-                if (LOG_SOURCE)
-                    return string.Format("<!-- Added from: {0} -->\r\n{1}", Source, Value);
+                if (LogSource)
+                    return string.Format("<!-- Position [{2}], added from: {0} -->\r\n{1}", Source, Value, Position);
                 else
                     return Value;
             }
@@ -69,9 +70,9 @@ namespace System.Web.Mvc
         #region const
 
         // just provide any unique random string for key
-        private static readonly string KEY = "BundlerHelper__" + DateTime.Now.ToString();
+        private static readonly string Key = "BundlerHelper__" + DateTime.Now.ToString();
 
-        private static readonly bool LOG_SOURCE = HttpContext.Current.IsDebuggingEnabled;
+        private static readonly bool LogSource = HttpContext.Current.IsDebuggingEnabled;
 
         #endregion
 
@@ -91,7 +92,7 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddStyle(this HtmlHelper htmlHelper, string filePath)
         {
-            return AddStyle(htmlHelper, filePath, false);
+            return AddStyle(htmlHelper, filePath, 0);
         }
 
         /// <summary>
@@ -100,27 +101,28 @@ namespace System.Web.Mvc
         /// <param name="filePath">
         /// path to css file
         /// </param>
-        /// <param name="addToTop">
-        /// Add to top of stylesheet zone in head tag
+        /// <param name="position">
+        /// Position of the stylesheet, order ascending, default is 0
         /// </param>
         /// <example>
         /// <code>
-        /// AddStyles("~/Content/Site.css", true);
-        /// AddStyles("~/Content/css", false);
+        /// AddStyles("~/Content/Site.css", 0);
+        /// AddStyles("~/Content/css", int.MaxValue);
         /// </code>
         /// </example>
-        public static object AddStyle(this HtmlHelper htmlHelper, string filePath, bool addToTop)
+        public static object AddStyle(this HtmlHelper htmlHelper, string filePath, int position)
         {
-            var item = new BundleModel()
+            var item = new BundleModel
             {
+                Position = position,
                 Type = BundleType.Style,
                 Value = Styles.Render(filePath).ToHtmlString()
             };
 
-            if (LOG_SOURCE)
+            if (LogSource)
                 item.Source = WebPageContext.Current.Page.VirtualPath;
 
-            AddItem(GetContainer(htmlHelper), item, addToTop);
+            AddItem(GetContainer(htmlHelper), item);
 
             return null; // just for razor syntax
         }
@@ -130,7 +132,8 @@ namespace System.Web.Mvc
         /// </summary>
         public static IHtmlString RenderStyles(this HtmlHelper htmlHelper)
         {
-            return new HtmlString(string.Join("\r\n", GetContainer(htmlHelper).Where(x => x.Type == BundleType.Style || x.Type == BundleType.InlineStyle).OrderBy(x => x.Type)));
+            var allStyles = GetContainer(htmlHelper).Where(x => x.Type == BundleType.Style || x.Type == BundleType.InlineStyle).OrderBy(x => x.Position).ThenBy(x => x.Type);
+            return new HtmlString(string.Join("\r\n", allStyles));
         }
 
         #endregion
@@ -151,7 +154,7 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddHeadScript(this HtmlHelper htmlHelper, string filePath)
         {
-            return AddHeadScript(htmlHelper, filePath, false);
+            return AddHeadScript(htmlHelper, filePath, 0);
         }
 
         /// <summary>
@@ -160,27 +163,28 @@ namespace System.Web.Mvc
         /// <param name="filePath">
         /// path to javascript file
         /// </param>
-        /// <param name="addToTop">
-        /// Add to top of script zone in head tag
+        /// <param name="position">
+        /// Position of the script, order ascending, default is 0
         /// </param>
         /// <example>
         /// <code>
-        /// AddHeadScripts("~/Scripts/HelloWorld.js", false);
-        /// AddHeadScripts("~/bundles/jquery", true);
+        /// AddHeadScripts("~/Scripts/HelloWorld.js", 0);
+        /// AddHeadScripts("~/bundles/jquery", int.MaxValue);
         /// </code>
         /// </example>
-        public static object AddHeadScript(this HtmlHelper htmlHelper, string filePath, bool addToTop)
+        public static object AddHeadScript(this HtmlHelper htmlHelper, string filePath, int position)
         {
-            var item = new BundleModel()
+            var item = new BundleModel
             {
+                Position = position,
                 Type = BundleType.HeadScript,
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
-            if (LOG_SOURCE)
+            if (LogSource)
                 item.Source = WebPageContext.Current.Page.VirtualPath;
 
-            AddItem(GetContainer(htmlHelper), item, addToTop);
+            AddItem(GetContainer(htmlHelper), item);
 
             return null; // just for razor syntax
         }
@@ -190,7 +194,7 @@ namespace System.Web.Mvc
         /// </summary>
         public static IHtmlString RenderHeadScripts(this HtmlHelper htmlHelper)
         {
-            var allHeadScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.HeadScript || x.Type == BundleType.HeadInlineScript).OrderBy(x => x.Type);
+            var allHeadScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.HeadScript || x.Type == BundleType.HeadInlineScript).OrderBy(x => x.Position).ThenBy(x => x.Type);
             return new HtmlString(string.Join("\r\n", allHeadScripts));
         }
 
@@ -212,7 +216,7 @@ namespace System.Web.Mvc
         /// </example>
         public static object AddBodyScript(this HtmlHelper htmlHelper, string filePath)
         {
-            return AddBodyScript(htmlHelper, filePath, false);
+            return AddBodyScript(htmlHelper, filePath, 0);
         }
 
         /// <summary>
@@ -221,27 +225,28 @@ namespace System.Web.Mvc
         /// <param name="filePath">
         /// path to javascript file
         /// </param>
-        /// <param name="addToTop">
-        /// Add to top of script zone in body tag
+        /// <param name="position">
+        /// Position of the script, order ascending, default is 0
         /// </param>
         /// <example>
         /// <code>
-        /// AddBodyScripts("~/Scripts/HelloWorld.js", false);
-        /// AddBodyScripts("~/bundles/jquery", true);
+        /// AddBodyScripts("~/Scripts/HelloWorld.js", 0);
+        /// AddBodyScripts("~/bundles/jquery", int.MaxValue);
         /// </code>
         /// </example>
-        public static object AddBodyScript(this HtmlHelper htmlHelper, string filePath, bool addToTop)
+        public static object AddBodyScript(this HtmlHelper htmlHelper, string filePath, int position)
         {
-            var item = new BundleModel()
+            var item = new BundleModel
             {
+                Position = position,
                 Type = BundleType.BodyScript,
                 Value = Scripts.Render(filePath).ToHtmlString()
             };
 
-            if (LOG_SOURCE)
+            if (LogSource)
                 item.Source = WebPageContext.Current.Page.VirtualPath;
 
-            AddItem(GetContainer(htmlHelper), item, addToTop);
+            AddItem(GetContainer(htmlHelper), item);
 
             return null; // just for razor syntax
         }
@@ -251,7 +256,7 @@ namespace System.Web.Mvc
         /// </summary>
         public static IHtmlString RenderBodyScripts(this HtmlHelper htmlHelper)
         {
-            var allBodyScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.BodyInlineScript || x.Type == BundleType.BodyScript).OrderBy(x => x.Type);
+            var allBodyScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.BodyInlineScript || x.Type == BundleType.BodyScript).OrderBy(x => x.Position).ThenBy(x => x.Type);
             return new HtmlString(string.Join("\r\n", allBodyScripts));
         }
 
@@ -266,19 +271,16 @@ namespace System.Web.Mvc
 
         private static IList<BundleModel> GetContainer(HttpContextBase context)
         {
-            if (context.Items[KEY] == null)
-                context.Items[KEY] = new List<BundleModel>();
-            return context.Items[KEY] as IList<BundleModel>;
+            if (context.Items[Key] == null)
+                context.Items[Key] = new List<BundleModel>();
+            return context.Items[Key] as IList<BundleModel>;
         }
 
-        private static void AddItem(IList<BundleModel> list, BundleModel item, bool addToTop = false, bool ignoreCase = true)
+        private static void AddItem(IList<BundleModel> list, BundleModel item, bool ignoreCase = true)
         {
             var existingItem = list.FirstOrDefault(x => x.Value.IndexOf(item.Value, ignoreCase ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture) >= 0);
             if (existingItem == null)
             {
-                if (addToTop)
-                    list.Insert(0, item);
-                else
                     list.Add(item);
             }
             else

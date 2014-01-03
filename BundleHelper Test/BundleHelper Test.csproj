@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
     <ExcludeApp_Data>false</ExcludeApp_Data>
+	<MvcBuildViews>true</MvcBuildViews>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

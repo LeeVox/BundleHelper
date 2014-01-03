@@ -11,10 +11,10 @@
 </div>
 
 <!-- Add specific stylesheet (book.css) to head tag -->
-@Html.AddStyle("~/Content/book.css")
+@Html.AddStyle("~/Content/book.css", -1)
 
 <!-- Add some inline scripts to body tag -->
-@Html.AddBodyScript(
+@Html.AddHeadScript(
     @<script>
         $(document).ready(function () {
             $('button[item]').click(function () {
@@ -32,5 +32,5 @@
                 return false;
             });
         });
-    </script>
+    </script>, 120
 )
