@@ -37,6 +37,27 @@ namespace BundleHelper_Test
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            bundles.Add(new StyleBundle("~/css/bundle1").Include(
+                    "~/Content/bundle0.css",
+                    "~/Content/bundle1.css"
+                ));
+            bundles.Add(new StyleBundle("~/css/bundle2").Include(
+                    "~/Content/bundle0.css",
+                    "~/Content/bundle2.css"
+                ));
+
+            bundles.Add(new ScriptBundle("~/js/js1").Include(
+                        "~/Scripts/book/js0.js",
+                        "~/Scripts/book/js1.js"));
+
+            bundles.Add(new ScriptBundle("~/js/js2").Include(
+                        "~/Scripts/book/js0.js",
+                        "~/Scripts/book/js2.js"));
+
+            bundles.Add(new ScriptBundle("~/js/js3").Include(
+                        "~/Scripts/book/js0.js",
+                        "~/Scripts/book/js3.js"));
         }
     }
 }

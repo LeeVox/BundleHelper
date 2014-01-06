@@ -91,6 +91,7 @@ Change Logs
 ------------
  *      Version			Date            Description
  
+ *      2.2	Build 1		Jan-06-2014     Fixed bug duplicated javascripts/stylesheets if using bundling.
  *      2.2				Jan-03-2014     Updated feature to order javascripts/stylesheets by ascending number.
  *      2.1				Sep-10-2013     Fixed bugs when inline javascripts/stylesheets have comments
  *      2.0 Build 2		Jul-08-2013     Just updated for new format of version's build numer.

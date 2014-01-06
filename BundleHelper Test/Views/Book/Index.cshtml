@@ -3,6 +3,23 @@
 <!-- Add specific stylesheet (store.css) to head tag -->
 @Html.AddStyle("~/Content/store.css")
 
+<!-- Add bundle0.css and bundle1.css to view -->
+@Html.AddStyle("~/css/bundle1")
+
+<!-- Add bundle0.css and bundle2.css to view -->
+<!-- bundle0.css is already added before so that it will not be added here anymore -->
+@Html.AddStyle("~/css/bundle2", 100)
+
+<!-- Add js0.js and js1.js to view -->
+@Html.AddHeadScript("~/js/js1", -1)
+<!-- Add js0.js and js2.js to view -->
+<!-- js0.js is already added before so that it will not be added here anymore -->
+@Html.AddHeadScript("~/js/js2")
+
+<!-- Add js0.js and js3.js to view -->
+<!-- js0.js is already added before (in head tag) so that it will not be added here anymore -->
+@Html.AddBodyScript("~/js/js3", 100)
+
 <h2>Book Store</h2>
 <div class="store">
     @foreach (var book in Model)

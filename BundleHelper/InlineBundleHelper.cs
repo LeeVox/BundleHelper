@@ -303,9 +303,9 @@ namespace System.Web.Mvc
                 var normalizedContent = IsDebugMode ? rawScript : Normalize(rawScript);
 
                 string compactScript = string.Empty;
-                foreach (var match in RgxGetScriptContents.Matches(normalizedContent))
+                foreach (Match match in RgxGetScriptContents.Matches(normalizedContent))
                 {
-                    compactScript += (match as Match).Groups["content"].Value;
+                    compactScript += match.Groups["content"].Value;
                 }
 
                 int compactKey = compactScript.GetHashCode();
@@ -338,9 +338,9 @@ namespace System.Web.Mvc
                 var normalizedContent = IsDebugMode ? rawStylesheet : Normalize(rawStylesheet);
 
                 string compactStylesheet = string.Empty;
-                foreach (var match in RgxGetStyleSheetContents.Matches(normalizedContent))
+                foreach (Match match in RgxGetStyleSheetContents.Matches(normalizedContent))
                 {
-                    compactStylesheet += (match as Match).Groups["content"].Value;
+                    compactStylesheet += match.Groups["content"].Value;
                 }
 
                 int compactKey = compactStylesheet.GetHashCode();

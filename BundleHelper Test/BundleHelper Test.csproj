@@ -41,7 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <ExcludeGeneratedDebugSymbol>true</ExcludeGeneratedDebugSymbol>
     <ExcludeApp_Data>false</ExcludeApp_Data>
-	<MvcBuildViews>true</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -142,6 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\book.css" />
+    <Content Include="Content\bundle2.css" />
+    <Content Include="Content\bundle0.css" />
+    <Content Include="Content\bundle1.css" />
     <Content Include="Content\CurrentUser.css" />
     <Content Include="Content\customer.css" />
     <Content Include="Content\store.css" />
@@ -203,6 +206,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\book\bookdetail.js" />
+    <Content Include="Scripts\book\js3.js" />
+    <Content Include="Scripts\book\js2.js" />
+    <Content Include="Scripts\book\js1.js" />
     <Content Include="Scripts\customer\action1.js" />
     <Content Include="Scripts\customer\action3.js" />
     <Content Include="Scripts\customer\user.js" />
@@ -218,6 +224,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\book\js0.js" />
     <Content Include="Scripts\knockout-2.1.0.debug.js" />
     <Content Include="Scripts\knockout-2.1.0.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />

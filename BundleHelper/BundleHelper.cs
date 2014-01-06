@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Optimization;
 using System.Web.WebPages;
 
@@ -48,10 +49,7 @@ namespace System.Web.Mvc
 
             public override string ToString()
             {
-                if (LogSource)
-                    return string.Format("<!-- Position [{2}], added from: {0} -->\r\n{1}", Source, Value, Position);
-                else
-                    return Value;
+                return Value;
             }
         }
 
@@ -70,11 +68,23 @@ namespace System.Web.Mvc
         #region const
 
         // just provide any unique random string for key
-        private static readonly string Key = "BundlerHelper__" + DateTime.Now.ToString();
+        private static readonly string Key = "BundlerHelper__" + DateTime.Now;
 
         private static readonly bool LogSource = HttpContext.Current.IsDebuggingEnabled;
 
+        private static readonly Regex RgxTrimStyleSheets = new Regex(
+            @"(?<stylesheet>\< link href = ""(?<link>.+?)"" rel = ""stylesheet"" \/\>)+?".Replace(" ", @"\s*"),
+            RegexOptions.Multiline | RegexOptions.IgnoreCase
+        );
+
+        private static readonly Regex RgxTrimScripts = new Regex(
+            @"(?<script>\< script src = ""(?<link>.+?)"" \> \< \/ script \>)+?".Replace(" ", @"\s*"),
+            RegexOptions.Multiline | RegexOptions.IgnoreCase
+        );
+
         #endregion
+
+        private static List<string> AllScriptSourceFilesInHead;
 
         #region styles
 
@@ -133,7 +143,8 @@ namespace System.Web.Mvc
         public static IHtmlString RenderStyles(this HtmlHelper htmlHelper)
         {
             var allStyles = GetContainer(htmlHelper).Where(x => x.Type == BundleType.Style || x.Type == BundleType.InlineStyle).OrderBy(x => x.Position).ThenBy(x => x.Type);
-            return new HtmlString(string.Join("\r\n", allStyles));
+            var trimStyles = RemoveDuplicatedStylesheets(allStyles);
+            return new HtmlString(string.Join("\r\n", trimStyles));
         }
 
         #endregion
@@ -195,7 +206,9 @@ namespace System.Web.Mvc
         public static IHtmlString RenderHeadScripts(this HtmlHelper htmlHelper)
         {
             var allHeadScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.HeadScript || x.Type == BundleType.HeadInlineScript).OrderBy(x => x.Position).ThenBy(x => x.Type);
-            return new HtmlString(string.Join("\r\n", allHeadScripts));
+            AllScriptSourceFilesInHead = new List<string>();
+            var trimScripts = RemoveDuplicatedScripts(AllScriptSourceFilesInHead, allHeadScripts);
+            return new HtmlString(string.Join("\r\n", trimScripts));
         }
 
         #endregion
@@ -257,7 +270,8 @@ namespace System.Web.Mvc
         public static IHtmlString RenderBodyScripts(this HtmlHelper htmlHelper)
         {
             var allBodyScripts = GetContainer(htmlHelper).Where(x => x.Type == BundleType.BodyInlineScript || x.Type == BundleType.BodyScript).OrderBy(x => x.Position).ThenBy(x => x.Type);
-            return new HtmlString(string.Join("\r\n", allBodyScripts));
+            var trimScripts = RemoveDuplicatedScripts(AllScriptSourceFilesInHead ?? new List<string>(), allBodyScripts);
+            return new HtmlString(string.Join("\r\n", trimScripts));
         }
 
         #endregion
@@ -289,6 +303,53 @@ namespace System.Web.Mvc
                 if ((int)item.Type < (int)existingItem.Type)
                     existingItem.Type = item.Type;
             }
+        }
+
+        private static IEnumerable<string> RemoveDuplicatedStylesheets(IEnumerable<BundleModel> allStyles)
+        {
+            var ret = new List<string>();
+            var allSourceFiles = new List<string>();
+
+            foreach (var bundle in allStyles)
+            {
+                if (LogSource)
+                    ret.Add(string.Format("<!-- Position [{0}], added from: {1} -->", bundle.Position, bundle.Source));
+
+                var matches = RgxTrimStyleSheets.Matches(bundle.Value);
+                foreach (Match match in matches)
+                {
+                    if (allSourceFiles.Any(x => string.Compare(x, match.Groups["link"].Value, StringComparison.OrdinalIgnoreCase) != 0))
+                    {
+                        allSourceFiles.Add(match.Groups["link"].Value);
+                        ret.Add(match.Groups["stylesheet"].Value);
+                    }
+                }
+            }
+
+            return ret;
+        }
+
+        private static IEnumerable<string> RemoveDuplicatedScripts(ICollection<string> allSourceFiles, IEnumerable<BundleModel> allScripts)
+        {
+            var ret = new List<string>();
+
+            foreach (var bundle in allScripts)
+            {
+                if (LogSource)
+                    ret.Add(string.Format("<!-- Position [{0}], added from: {1} -->", bundle.Position, bundle.Source));
+
+                var matches = RgxTrimScripts.Matches(bundle.Value);
+                foreach (Match match in matches)
+                {
+                    if (allSourceFiles.Any(x => string.Compare(x, match.Groups["link"].Value, StringComparison.OrdinalIgnoreCase) != 0))
+                    {
+                        allSourceFiles.Add(match.Groups["link"].Value);
+                        ret.Add(match.Groups["script"].Value);
+                    }
+                }
+            }
+
+            return ret;
         }
 
         #endregion
