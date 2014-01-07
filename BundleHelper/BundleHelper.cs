@@ -318,7 +318,7 @@ namespace System.Web.Mvc
                 var matches = RgxTrimStyleSheets.Matches(bundle.Value);
                 foreach (Match match in matches)
                 {
-                    if (allSourceFiles.Any(x => string.Compare(x, match.Groups["link"].Value, StringComparison.OrdinalIgnoreCase) != 0))
+                    if (allSourceFiles.All(x => string.Compare(x, match.Groups["link"].Value, StringComparison.OrdinalIgnoreCase) != 0))
                     {
                         allSourceFiles.Add(match.Groups["link"].Value);
                         ret.Add(match.Groups["stylesheet"].Value);
@@ -341,7 +341,7 @@ namespace System.Web.Mvc
                 var matches = RgxTrimScripts.Matches(bundle.Value);
                 foreach (Match match in matches)
                 {
-                    if (allSourceFiles.Any(x => string.Compare(x, match.Groups["link"].Value, StringComparison.OrdinalIgnoreCase) != 0))
+                    if (allSourceFiles.All(x => string.Compare(x, match.Groups["link"].Value, StringComparison.OrdinalIgnoreCase) != 0))
                     {
                         allSourceFiles.Add(match.Groups["link"].Value);
                         ret.Add(match.Groups["script"].Value);
